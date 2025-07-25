@@ -1,10 +1,12 @@
 package com.gabryel.todo_list.service;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.gabryel.todo_list.entity.TodoList;
+import com.gabryel.todo_list.errormessage.CustomErrorMessage;
 import com.gabryel.todo_list.repository.TodoRepository;
 
 
@@ -22,15 +24,20 @@ public class TodoService {
 	}
 	
 	public ResponseEntity<?> listAll(){
-		return new ResponseEntity<>(todoRepository.findAll(), HttpStatus.OK);
+		Sort mainPriority = Sort.by("priority").descending().and(Sort.by("name").ascending());
+		return new ResponseEntity<>(todoRepository.findAll(mainPriority), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<?> findById(Long id){
-		return new ResponseEntity<>(todoRepository.findById(id), HttpStatus.OK);
+		if(!todoRepository.findById(id).isEmpty())
+			return new ResponseEntity<>(todoRepository.findById(id), HttpStatus.OK);
+		return userNotExist(id);
 	}
 	
 	public ResponseEntity<?> update(TodoList todo){
-		return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.OK);
+		if(!todoRepository.findById(todo.getId()).isEmpty())
+			return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.OK);
+		return userNotExist(todo.getId());
 	}
 	
 	public ResponseEntity<?> delete(Long id){
@@ -38,5 +45,7 @@ public class TodoService {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	
+	private ResponseEntity<?> userNotExist(Long id){
+		return new ResponseEntity<>(new CustomErrorMessage("This user no exist"), HttpStatus.NOT_FOUND);
+	}
 }
