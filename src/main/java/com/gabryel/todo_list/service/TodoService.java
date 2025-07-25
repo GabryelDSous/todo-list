@@ -20,32 +20,42 @@ public class TodoService {
 	}
 	
 	public ResponseEntity<?> create(TodoList todo){
-		return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.CREATED);
+		if(todoRepository.findByName(todo.getName()).isEmpty())
+			return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.CREATED);
+		return userExist();
 	}
 	
 	public ResponseEntity<?> listAll(){
 		Sort mainPriority = Sort.by("priority").descending().and(Sort.by("name").ascending());
-		return new ResponseEntity<>(todoRepository.findAll(mainPriority), HttpStatus.OK);
+		if(!todoRepository.findAll().isEmpty())
+			return new ResponseEntity<>(todoRepository.findAll(mainPriority), HttpStatus.OK);
+		return new ResponseEntity<>(new CustomErrorMessage("users doesn't exist"), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<?> findById(Long id){
 		if(!todoRepository.findById(id).isEmpty())
 			return new ResponseEntity<>(todoRepository.findById(id), HttpStatus.OK);
-		return userNotExist(id);
+		return userNotExist();
 	}
 	
 	public ResponseEntity<?> update(TodoList todo){
 		if(!todoRepository.findById(todo.getId()).isEmpty())
 			return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.OK);
-		return userNotExist(todo.getId());
+		return userNotExist();
 	}
 	
 	public ResponseEntity<?> delete(Long id){
-		todoRepository.deleteById(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+		if(!todoRepository.findById(id).isEmpty()) {
+			todoRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		return userNotExist();
 	}
 
-	private ResponseEntity<?> userNotExist(Long id){
-		return new ResponseEntity<>(new CustomErrorMessage("This user no exist"), HttpStatus.NOT_FOUND);
+	private ResponseEntity<?> userNotExist(){
+		return new ResponseEntity<>(new CustomErrorMessage("User doesn't exist"), HttpStatus.NOT_FOUND);
+	}
+	private ResponseEntity<?> userExist(){
+		return new ResponseEntity<>(new CustomErrorMessage("User just exist"), HttpStatus.NOT_ACCEPTABLE);
 	}
 }

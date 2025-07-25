@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -22,6 +25,8 @@ public class TodoList {
 	private String description;
 	
 	private boolean performed;
+	@Min(1)
+	@Max(10)
 	private int priority;
 	
 	public Long getId() {
