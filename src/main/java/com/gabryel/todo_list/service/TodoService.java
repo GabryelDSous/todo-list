@@ -3,12 +3,10 @@ package com.gabryel.todo_list.service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.gabryel.todo_list.entity.TodoList;
 import com.gabryel.todo_list.repository.TodoRepository;
 
-import jakarta.validation.Valid;
 
 @Service
 public class TodoService {
@@ -19,11 +17,11 @@ public class TodoService {
 		this.todoRepository = todoRepository;
 	}
 	
-	public ResponseEntity<?> create(@RequestBody @Valid TodoList todo){
+	public ResponseEntity<?> create(TodoList todo){
 		return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.CREATED);
 	}
 	
-	public ResponseEntity<?> listAll(@RequestBody @Valid TodoList todo){
+	public ResponseEntity<?> listAll(TodoList todo){
 		return new ResponseEntity<>(todoRepository.findAll(), HttpStatus.OK);
 	}
 	
@@ -31,7 +29,7 @@ public class TodoService {
 		return new ResponseEntity<>(todoRepository.findById(id), HttpStatus.OK);
 	}
 	
-	public ResponseEntity<?> update(@RequestBody @Valid TodoList todo){
+	public ResponseEntity<?> update(TodoList todo){
 		return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.UPGRADE_REQUIRED);
 	}
 	
