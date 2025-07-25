@@ -21,7 +21,7 @@ public class TodoService {
 		return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.CREATED);
 	}
 	
-	public ResponseEntity<?> listAll(TodoList todo){
+	public ResponseEntity<?> listAll(){
 		return new ResponseEntity<>(todoRepository.findAll(), HttpStatus.OK);
 	}
 	

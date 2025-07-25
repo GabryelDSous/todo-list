@@ -16,7 +16,7 @@ import com.gabryel.todo_list.service.TodoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("Todolist")
+@RequestMapping("todolist")
 public class TodoController{
 	
 	private final TodoService todoService;
@@ -31,8 +31,8 @@ public class TodoController{
 	}
 	
 	@GetMapping
-	public ResponseEntity<?> findAll(@RequestBody @Valid TodoList todo){
-		return todoService.listAll(todo);
+	public ResponseEntity<?> findAll(){
+		return todoService.listAll();
 	}
 	
 	@GetMapping("/{id}")
