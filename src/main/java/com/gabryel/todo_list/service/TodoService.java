@@ -30,7 +30,7 @@ public class TodoService {
 	}
 	
 	public ResponseEntity<?> update(TodoList todo){
-		return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.UPGRADE_REQUIRED);
+		return new ResponseEntity<>(todoRepository.save(todo), HttpStatus.OK);
 	}
 	
 	public ResponseEntity<?> delete(Long id){
